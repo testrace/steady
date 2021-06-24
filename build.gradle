@@ -38,10 +38,12 @@ subprojects {
 
 project(':steady-api') {
     dependencies {
+        compile project(":steady-core")
     }
 }
 
 project(':steady-core') {
     dependencies {
+
     }
 }
