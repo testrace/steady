@@ -21,6 +21,10 @@ dependencies {
     implementation 'com.querydsl:querydsl-apt:4.4.0'
     implementation 'com.querydsl:querydsl-jpa:4.4.0'
     annotationProcessor 'com.querydsl:querydsl-apt:4.4.0'
+
+    // https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
+    implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.7.1'
+
 }
 
 def querydslDir = 'build/generated/querydsl'
