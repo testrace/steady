@@ -1,0 +1,3 @@
+rootProject.name = 'steady'
+include 'steady-core'
+include 'steady-api'
