@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import {BrowserRouter, Route, Redirect} from "react-router-dom";
+import Steady from "./layouts/Steady";
+
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <BrowserRouter>
+        <Route path="/steady" component={Steady} />
+        <Redirect from="/" to="/steady/dashBoard" />
+    </BrowserRouter>,
   document.getElementById('root')
 );
 
