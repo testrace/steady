@@ -1,18 +1,17 @@
 package com.hadasht.steady.core.steady.service;
 
+import com.hadasht.steady.core.steady.domain.Steady;
 import com.hadasht.steady.core.steady.domain.SteadyTemplate;
 import com.hadasht.steady.core.steady.repository.SteadyRepository;
 import com.hadasht.steady.core.steady.repository.SteadyTemplateRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class SteadyServiceTest {
@@ -43,6 +42,22 @@ class SteadyServiceTest {
 		steadyTemplateRepository.save(template5);
 
 		//then
+		List<SteadyTemplate> templates = steadyTemplateRepository.findAll();
+		assertThat(templates).isNotEmpty().allMatch(steadyTemplate -> steadyTemplate.getSteadyName().contains("테스트"));
+
+	}
+
+	@Test
+	void createSteadyForToday() throws Exception {
+		//given
+		test();
+
+		//when
+		List<Steady> listForToday = steadyService.getListForToday();
+
+		//then
+		assertThat(listForToday).isNotEmpty();
+		assertThat(listForToday.size()).isEqualTo(5);
 
 	}
 
