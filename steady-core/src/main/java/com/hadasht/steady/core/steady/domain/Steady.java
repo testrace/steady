@@ -9,17 +9,22 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "STEADY")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SequenceGenerator(
+		name = "STEADY_SEQ_GEN",
+		sequenceName = "STEADY_SEQ"
+)
 public class Steady extends BaseEntity {
 
 	@Id
-	@GeneratedValue
-	@Column(name = "id")
+	@GeneratedValue(generator = "STEADY_SEQ_GEN", strategy = GenerationType.SEQUENCE)
+	@Column(name = "steady_id")
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "template_id")
 	private SteadyTemplate steadyTemplate;
 
 	private LocalDate steadyDay;

@@ -5,20 +5,22 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalTime;
 
 @Entity
+@Table(name = "STEADY_TEMPLATE")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SequenceGenerator(
+		name = "STEADY_TEMPLATE_SEQ_GEN",
+		sequenceName = "STEADY_TEMPLATE_SEQ"
+)
 public class SteadyTemplate extends BaseEntity {
 
 	@Id
-	@GeneratedValue
-	@Column(name = "id")
+	@GeneratedValue(generator = "STEADY_TEMPLATE_SEQ_GEN", strategy = GenerationType.SEQUENCE)
+	@Column(name = "template_id")
 	private Long id;
 
 	private String steadyName;
