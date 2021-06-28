@@ -24,8 +24,8 @@ public class Steady extends BaseEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "template_id")
-	private SteadyTemplate steadyTemplate;
+	@JoinColumn(name = "template_id", updatable = false)
+	private SteadyTemplate template;
 
 	private LocalDate steadyDay;
 	private boolean finished;
@@ -39,7 +39,7 @@ public class Steady extends BaseEntity {
 	}
 
 	public Steady(SteadyTemplate steadyTemplate) {
-		this.steadyTemplate = steadyTemplate;
+		this.template = steadyTemplate;
 		this.finished = false;
 		this.steadyDay = LocalDate.now();
 	}
