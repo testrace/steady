@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,6 +32,11 @@ public class SteadyService {
 			steadyRepository.saveAll(steadies);
 		}
 		return steadies;
+	}
+
+	public void finished(Long id) {
+		Optional<Steady> steady = steadyRepository.findById(id);
+		steady.ifPresent(Steady::finish);
 	}
 
 	private Sort sortBy(String id) {
