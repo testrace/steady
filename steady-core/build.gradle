@@ -25,6 +25,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
     implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.7.1'
 
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.22'
+
 }
 
 def querydslDir = 'build/generated/querydsl'
