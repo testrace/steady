@@ -70,8 +70,10 @@ public final class ApiResponse {
 		return new ApiResponse(FAIL, data, message);
 	}
 
-	public static ApiResponse ifPresent(Object data, String message) {
-		return Optional.ofNullable(data).map(o -> new ApiResponse(SUCCESS, o)).orElseGet(() -> new ApiResponse(FAIL, message));
+	public static ApiResponse ifPresent(Object data, String failMessage) {
+		return Optional.ofNullable(data)
+		               .map(o -> new ApiResponse(SUCCESS, o))
+		               .orElseGet(() -> new ApiResponse(FAIL, failMessage));
 	}
 
 	public static ApiResponse ifPresent(boolean ifPresent, Object data, String message) {
