@@ -4,6 +4,7 @@ import com.hadasht.steady.api.dto.SteadyDto;
 import com.hadasht.steady.core.steady.domain.Steady;
 import com.hadasht.steady.core.steady.domain.SteadyTemplate;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -47,12 +48,13 @@ class SteadyApiControllerTest {
 	}
 
 	@Test
+	@DisplayName("오늘 목록 가져오기")
 	void getTodaySteadies() throws Exception {
 		//given
 		List<SteadyDto> dtos = generateDto();
 
 		//when
-		when(steadyApiService.getSteadyToday()).thenReturn(dtos);
+		when(steadyApiService.getTodaySteadies()).thenReturn(dtos);
 
 		//then
 		mockMvc.perform(get("/api/list"))
@@ -63,11 +65,10 @@ class SteadyApiControllerTest {
 				.andExpect(jsonPath("data[0].steadyId").exists())
 				.andExpect(jsonPath("data[0].steadyName").exists())
 				.andExpect(jsonPath("data[0].finished").exists())
-				.andExpect(jsonPath("data[0].steadyDay").exists())
-
-
-		;
+				.andExpect(jsonPath("data[0].steadyDay").exists());
 	}
+
+
 
 
 
