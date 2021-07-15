@@ -9,11 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,6 +25,7 @@ import java.util.stream.IntStream;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,7 +72,37 @@ class SteadyApiControllerTest {
 				.andExpect(jsonPath("data[0].steadyDay").exists());
 	}
 
+	@Test
+	@DisplayName("할 일 완료")
+	void finished() throws Exception {
+		//given
+		final Long id = 1L;
+		SteadyDto dto = SteadyDto.builder()
+				.steadyId(id)
+				.steadyName("할일01")
+				.steadyDay(LocalDate.of(2021, 7, 15))
+				.finished(true)
+				.build();
 
+
+		//when
+		when(steadyApiService.finished(id)).thenReturn(dto);
+
+		//then
+		mockMvc.perform(
+					post("/api/finished/"+id)
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaTypes.HAL_JSON)
+				)
+		        .andExpect(status().isOk())
+				.andExpect(jsonPath("code").exists())
+				.andExpect(jsonPath("data").exists())
+				.andExpect(jsonPath("data").isMap())
+				.andExpect(jsonPath("data.steadyId").value(id))
+				.andExpect(jsonPath("data.steadyName").value(dto.getSteadyName()))
+				.andExpect(jsonPath("data.finished").value(dto.isFinished()))
+				.andExpect(jsonPath("data.steadyDay").value(dto.getSteadyDay().toString()));
+	}
 
 
 
