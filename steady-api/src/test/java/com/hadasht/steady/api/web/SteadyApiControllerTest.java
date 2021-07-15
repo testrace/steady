@@ -1,34 +1,98 @@
 package com.hadasht.steady.api.web;
 
+import com.hadasht.steady.api.dto.SteadyDto;
+import com.hadasht.steady.core.steady.domain.Steady;
+import com.hadasht.steady.core.steady.domain.SteadyTemplate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-
 class SteadyApiControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
 
+	@MockBean
+	SteadyApiService steadyApiService;
+
+	@Autowired
+	private WebApplicationContext ctx;
+
+	@BeforeEach
+	public void setUp() {
+		this.mockMvc = MockMvcBuilders
+				.webAppContextSetup(ctx)
+				.addFilters(new CharacterEncodingFilter("UTF-8", true))
+				.alwaysDo(print())
+				.build();
+	}
+
 	@Test
 	void getTodaySteadies() throws Exception {
 		//given
-
+		List<SteadyDto> dtos = generateDto();
 
 		//when
-
+		when(steadyApiService.getSteadyToday()).thenReturn(dtos);
 
 		//then
 		mockMvc.perform(get("/api/list"))
-		       .andDo(print())
-		       .andExpect(status().isOk());
+		       .andExpect(status().isOk())
+				.andExpect(jsonPath("code").exists())
+				.andExpect(jsonPath("data").exists())
+				.andExpect(jsonPath("data").isArray())
+				.andExpect(jsonPath("data[0].steadyId").exists())
+				.andExpect(jsonPath("data[0].steadyName").exists())
+				.andExpect(jsonPath("data[0].finished").exists())
+				.andExpect(jsonPath("data[0].steadyDay").exists())
+
+
+		;
 	}
+
+
+
+	private List<SteadyDto> generateDto() {
+		List<SteadyDto> steadyDtos = generateSteadies()
+				.stream()
+                .map(SteadyDto::from)
+                .collect(Collectors.toList());
+		AtomicLong atomicLong = new AtomicLong();
+		steadyDtos.forEach(dto -> dto.setSteadyId(atomicLong.incrementAndGet()));
+		return steadyDtos;
+	}
+
+	private List<Steady> generateSteadies() {
+		return IntStream.range(0, 5)
+		         .mapToObj(this::generateTemplate)
+		         .map(Steady::new)
+		         .collect(Collectors.toList());
+	}
+
+	private SteadyTemplate generateTemplate(int i) {
+		return new SteadyTemplate("할일" + i,
+				LocalTime.of(i + 10, 0),
+				LocalTime.of(i + 11, 0));
+	}
+
+
 }
