@@ -14,7 +14,7 @@ public class SteadyApiController {
 
 	@GetMapping("/api/list")
 	public ApiResponse list() {
-		return ApiResponse.success(steadyApiService.getSteadyToday());
+		return ApiResponse.success(steadyApiService.getTodaySteadies());
 	}
 
 

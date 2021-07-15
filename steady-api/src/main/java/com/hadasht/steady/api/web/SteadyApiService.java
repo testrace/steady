@@ -15,7 +15,7 @@ public class SteadyApiService {
 
 	private final SteadyService steadyService;
 
-	public List<SteadyDto> getSteadyToday() {
+	public List<SteadyDto> getTodaySteadies() {
 		List<Steady> listForToday = steadyService.getListForToday();
 		return listForToday.stream()
 		                   .map(SteadyDto::from)
