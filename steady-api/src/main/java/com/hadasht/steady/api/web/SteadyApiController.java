@@ -1,36 +1,30 @@
 package com.hadasht.steady.api.web;
 
-import com.hadasht.steady.api.dto.SteadyDto;
-import com.hadasht.steady.core.steady.domain.Steady;
-import com.hadasht.steady.core.steady.service.SteadyService;
 import com.hadasht.steady.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(produces = MediaTypes.HAL_JSON_VALUE)
 public class SteadyApiController {
 
-	private final SteadyService steadyService;
+	private final SteadyApiService steadyApiService;
 
 	@GetMapping("/api/list")
 	public ApiResponse list() {
-		List<Steady> listForToday = steadyService.getListForToday();
-		List<SteadyDto> steadyDtos = listForToday.stream().map(SteadyDto::from).collect(Collectors.toList());
-		return ApiResponse.success(steadyDtos);
+		return ApiResponse.success(steadyApiService.getTodaySteadies());
 	}
 
-	@PostMapping("/api/finished/{id}")
-	public ApiResponse finished(@PathVariable Long id) {
-		Long finishedId = steadyService.finished(id);
 
-		return ApiResponse.success(finishedId);
+	@PostMapping("/api/finished/{id}")
+	public ApiResponse finished(@PathVariable("id") Long id) {
+		try {
+			return ApiResponse.success(steadyApiService.finished(id));
+		} catch (NullPointerException e) {
+			return ApiResponse.fail("데이터 조회 실패");
+		}
 	}
 
 
