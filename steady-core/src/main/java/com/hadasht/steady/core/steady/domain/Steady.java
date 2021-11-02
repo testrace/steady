@@ -18,6 +18,14 @@ import java.time.LocalDate;
 )
 public class Steady extends BaseEntity {
 
+	public static final Steady EMPTY = new Steady();
+
+	public Steady(SteadyTemplate steadyTemplate) {
+		this.template = steadyTemplate;
+		this.finished = false;
+		this.steadyDay = LocalDate.now();
+	}
+
 	@Id
 	@GeneratedValue(generator = "STEADY_SEQ_GEN", strategy = GenerationType.SEQUENCE)
 	@Column(name = "steady_id")
@@ -32,16 +40,6 @@ public class Steady extends BaseEntity {
 
 	public void finish() {
 		this.finished = true;
-	}
-
-	public void cancelFinish() {
-		this.finished = false;
-	}
-
-	public Steady(SteadyTemplate steadyTemplate) {
-		this.template = steadyTemplate;
-		this.finished = false;
-		this.steadyDay = LocalDate.now();
 	}
 
 }

@@ -34,9 +34,10 @@ public class SteadyService {
 		return steadies;
 	}
 
-	public void finished(Long id) {
+	public Steady finished(Long id) {
 		Optional<Steady> steady = steadyRepository.findById(id);
 		steady.ifPresent(Steady::finish);
+		return steady.orElse(Steady.EMPTY);
 	}
 
 	private Sort sortBy(String id) {
