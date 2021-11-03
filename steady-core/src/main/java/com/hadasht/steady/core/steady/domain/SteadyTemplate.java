@@ -27,7 +27,6 @@ public class SteadyTemplate extends BaseEntity {
 	private LocalTime startTime;
 	private LocalTime endTime;
 
-
 	public SteadyTemplate(String steadyName, LocalTime startTime, LocalTime endTime) {
 		if (startTime.isAfter(endTime)) {
 			throw new SteadyTemplateTimeException("시작 시간이 종료시간보다 이후입니다.");

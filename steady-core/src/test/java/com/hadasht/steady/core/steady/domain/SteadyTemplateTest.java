@@ -18,8 +18,6 @@ class SteadyTemplateTest {
 		assertThat(steadyTemplate.getSteadyName()).isEqualTo("테스트");
 	}
 
-
-
 	@Test
 	@DisplayName("객체 생성 예외 처리")
 	void createSteadyTemplateException() throws Exception {
